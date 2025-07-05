@@ -1,20 +1,21 @@
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_render.h>
 #include <memory>
 
 namespace engine {
 
-struct TextureDeleter {
+template <typename T> struct TextureDeleter;
+
+template <> struct TextureDeleter<SDL_Texture> {
   void operator()(SDL_Texture *texture) {
     if (texture)
       SDL_DestroyTexture(texture);
   }
 };
-using TexturePtr = std::unique_ptr<SDL_Texture, TextureDeleter>;
+template <typename T> using TexturePtr = std::unique_ptr<T, TextureDeleter<T>>;
 
 class Texture {
 public:
 private:
-  TexturePtr mTexture;
+  TexturePtr<SDL_Texture> mTexture;
 };
 } // namespace engine
