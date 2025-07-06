@@ -1,4 +1,5 @@
 #include <SDL3/SDL_rect.h>
+namespace engine {
 /**
  * \brief Generic rectangle class with float precision
  *
@@ -20,5 +21,4 @@ struct RectF {
   float w; ///< width of the rectangle
   float h; ///< height of the rectangle
 };
-
-struct CircleF {};
+} // namespace engine
