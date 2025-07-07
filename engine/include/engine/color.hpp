@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL_pixels.h>
 #include <cstdint>
+namespace engine {
 struct Color {
   std::uint8_t r = 0;
   std::uint8_t g = 0;
@@ -12,5 +13,6 @@ struct Color {
   constexpr Color(std::uint8_t r, std::uint8_t g, std::uint8_t b,
                   std::uint8_t a)
       : r(r), g(g), b(b), a(a) {}
-  SDL_Color toSDL() const { return SDL_Color{r, g, b, a}; }
+  inline SDL_Color toSDL() const { return {r, g, b, a}; }
 };
+} // namespace engine

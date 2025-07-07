@@ -23,6 +23,6 @@ struct RectF {
    * rectangle to topleft model of SDL
    *
    */
-  SDL_FRect toSDL() const;
+  inline SDL_FRect toSDL() const { return {x - w / 2.0f, y - h / 2.0f, w, h}; }
 };
 } // namespace engine
