@@ -1,4 +1,6 @@
 #include "engine/input.hpp"
+#include "engine/action.hpp"
+#include "engine/commands.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_keycode.h>
 #include <memory>
@@ -54,14 +56,14 @@ void Input::bindAction(Action action, std::unique_ptr<Command> command) {
 
 void Input::dispatchAction(Action action) {
   if (mActionToCommand.contains(action)) {
-    mCommandQueue.push(std::move(mActionToCommand[action]));
+    mCommandQueue.push(mActionToCommand[action].get());
   }
 }
 
 bool Input::hasPendingCommand() { return !mCommandQueue.empty(); }
 
-std::unique_ptr<Command> Input::popCommand() {
-  auto cmd = std::move(mCommandQueue.front());
+Command *Input::popCommand() {
+  auto cmd = mCommandQueue.front();
   mCommandQueue.pop();
   return cmd;
 }

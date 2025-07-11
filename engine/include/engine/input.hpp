@@ -24,7 +24,7 @@ public:
   static void dispatchAction(Action);
 
   static bool hasPendingCommand();
-  static std::unique_ptr<Command> popCommand();
+  static Command *popCommand();
 
 private:
   inline static std::unordered_set<SDL_Keycode> mCurrentKeys;
@@ -34,6 +34,6 @@ private:
   inline static std::unordered_map<SDL_Keycode, Action> mKeyToAction;
   inline static std::unordered_map<Action, std::unique_ptr<Command>>
       mActionToCommand;
-  inline static std::queue<std::unique_ptr<Command>> mCommandQueue;
+  inline static std::queue<Command *> mCommandQueue;
 };
 } // namespace engine

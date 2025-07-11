@@ -13,6 +13,7 @@ public:
 };
 
 class QuitCommand : public Command {
+public:
   explicit QuitCommand(std::function<void()> callable);
   void execute(Entity e) override;
   ~QuitCommand();
