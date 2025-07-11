@@ -1,6 +1,7 @@
 #include "engine/input.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_keycode.h>
+#include <memory>
 
 namespace engine {
 
@@ -21,6 +22,9 @@ void Input::processEvent(SDL_Event const &e) {
     if (!mCurrentKeys.contains(key)) {
       mJustPressed.insert(key);
       mCurrentKeys.insert(key);
+      if (mKeyToAction.contains(key)) {
+        dispatchAction(mKeyToAction[key]);
+      }
     }
   } else if (e.type == SDL_EVENT_KEY_UP) {
     if (mCurrentKeys.contains(key)) {
@@ -38,6 +42,28 @@ bool Input::isKeyJustPressed(SDL_Keycode key) {
 
 bool Input::isKeyJustReleased(SDL_Keycode key) {
   return mJustReleased.contains(key);
+}
+
+void Input::bindKey(SDL_Keycode key, Action action) {
+  mKeyToAction[key] = action;
+}
+
+void Input::bindAction(Action action, std::unique_ptr<Command> command) {
+  mActionToCommand[action] = std::move(command);
+}
+
+void Input::dispatchAction(Action action) {
+  if (mActionToCommand.contains(action)) {
+    mCommandQueue.push(std::move(mActionToCommand[action]));
+  }
+}
+
+bool Input::hasPendingCommand() { return !mCommandQueue.empty(); }
+
+std::unique_ptr<Command> Input::popCommand() {
+  auto cmd = std::move(mCommandQueue.front());
+  mCommandQueue.pop();
+  return cmd;
 }
 
 } // namespace engine
