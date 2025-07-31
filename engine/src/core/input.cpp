@@ -4,13 +4,15 @@
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_keycode.h>
 #include <memory>
+#include <queue>
 
 namespace engine {
 
-void Input::init() {
+bool Input::init() {
   mCurrentKeys.clear();
   mJustPressed.clear();
   mJustReleased.clear();
+  return true;
 }
 
 void Input::update() {
@@ -18,20 +20,28 @@ void Input::update() {
   mJustReleased.clear();
 }
 
-void Input::processEvent(SDL_Event const &e) {
-  SDL_Keycode key = e.key.key;
-  if (e.type == SDL_EVENT_KEY_DOWN) {
-    if (!mCurrentKeys.contains(key)) {
-      mJustPressed.insert(key);
-      mCurrentKeys.insert(key);
-      if (mKeyToAction.contains(key)) {
-        dispatchAction(mKeyToAction[key]);
+void Input::processEvent() {
+  while (SDL_PollEvent(&mEvent)) {
+    SDL_Keycode key = mEvent.key.key;
+    switch (mEvent.type) {
+    case SDL_EVENT_KEY_DOWN:
+      if (!mCurrentKeys.contains(key)) {
+        mJustPressed.insert(key);
+        mCurrentKeys.insert(key);
+        if (mKeyToAction.contains(key)) {
+          dispatchAction(mKeyToAction[key]);
+        }
       }
-    }
-  } else if (e.type == SDL_EVENT_KEY_UP) {
-    if (mCurrentKeys.contains(key)) {
-      mJustReleased.insert(key);
-      mCurrentKeys.erase(key);
+      break;
+    case SDL_EVENT_KEY_UP:
+      if (mCurrentKeys.contains(key)) {
+        mJustReleased.insert(key);
+        mCurrentKeys.erase(key);
+      }
+      break;
+    case SDL_EVENT_QUIT:
+      mEventQueue.push(Event::Quit);
+      break;
     }
   }
 }
@@ -61,11 +71,18 @@ void Input::dispatchAction(Action action) {
 }
 
 bool Input::hasPendingCommand() { return !mCommandQueue.empty(); }
+bool Input::hasPendingEvents() { return !mEventQueue.empty(); }
 
 Command *Input::popCommand() {
   auto cmd = mCommandQueue.front();
   mCommandQueue.pop();
   return cmd;
+}
+
+Event Input::popEngineEvent() {
+  auto event = mEventQueue.front();
+  mEventQueue.pop();
+  return event;
 }
 
 } // namespace engine

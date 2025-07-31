@@ -1,0 +1,36 @@
+#include "game.hpp"
+#include "engine/event.hpp"
+
+bool Game::init() {
+  bool windowSuccess = mWindow.init("Geometry Wars", 1000, 800);
+  bool rendererSucess = mRenderer.init(mWindow.get());
+
+  return windowSuccess || rendererSucess;
+}
+
+void Game::processInput() {
+  mInput.processEvent();
+  while (mInput.hasPendingEvents()) {
+    switch (mInput.popEngineEvent()) {
+    case engine::Event::Quit:
+      mIsRunning = false;
+      break;
+    }
+  }
+}
+void Game::update() {}
+void Game::render() {}
+void Game::shutdown() {}
+
+void Game::run() {
+  init();
+
+  mIsRunning = true;
+  while (mIsRunning) {
+    processInput();
+    update();
+    render();
+  }
+}
+
+Game::~Game() { shutdown(); }

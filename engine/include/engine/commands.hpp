@@ -1,7 +1,8 @@
 #pragma once
 
+#include "engine/event.hpp"
 #include <cstdint>
-#include <functional>
+#include <queue>
 namespace engine {
 
 using Entity = std::uint32_t;
@@ -14,12 +15,12 @@ public:
 
 class QuitCommand : public Command {
 public:
-  explicit QuitCommand(std::function<void()> callable);
+  explicit QuitCommand(std::queue<Event> &q);
   void execute(Entity e) override;
   ~QuitCommand();
 
 private:
-  std::function<void()> mCallable;
+  std::queue<Event> &mEngineEventQueue;
 };
 
 } // namespace engine

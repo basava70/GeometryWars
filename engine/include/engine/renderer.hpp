@@ -5,25 +5,27 @@
 #include <memory>
 
 namespace engine {
-template <typename T> struct RendererDeleter;
 
-template <> struct RendererDeleter<SDL_Renderer> {
+struct RendererDeleter {
   void operator()(SDL_Renderer *renderer) {
     if (renderer)
       SDL_DestroyRenderer(renderer);
   }
 };
 
-using SDLRendererPtr =
-    std::unique_ptr<SDL_Renderer, RendererDeleter<SDL_Renderer>>;
+using RendererPtr = std::unique_ptr<SDL_Renderer, RendererDeleter>;
 
 class Renderer {
 public:
   bool init(SDL_Window *);
   void clear(Color);
   void present();
+  SDL_Renderer *get() const;
+  void shutdown() noexcept;
+
+  ~Renderer();
 
 private:
-  SDLRendererPtr mRenderer;
+  RendererPtr mRenderer;
 };
 } // namespace engine
