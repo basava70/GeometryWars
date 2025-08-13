@@ -18,7 +18,7 @@ using RendererPtr = std::unique_ptr<SDL_Renderer, RendererDeleter>;
 class Renderer {
 public:
   bool init(SDL_Window *);
-  void clear(Color);
+  void clear(Color color = {0, 0, 0, 255});
   void present();
   SDL_Renderer *get() const;
   void shutdown() noexcept;

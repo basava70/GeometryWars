@@ -22,9 +22,12 @@ void Input::update() {
 
 void Input::processEvent() {
   while (SDL_PollEvent(&mEvent)) {
-    SDL_Keycode key = mEvent.key.key;
     switch (mEvent.type) {
-    case SDL_EVENT_KEY_DOWN:
+    case SDL_EVENT_QUIT:
+      mEventQueue.push(Event::Quit);
+      break;
+    case SDL_EVENT_KEY_DOWN: {
+      SDL_Keycode key = mEvent.key.key;
       if (!mCurrentKeys.contains(key)) {
         mJustPressed.insert(key);
         mCurrentKeys.insert(key);
@@ -33,15 +36,15 @@ void Input::processEvent() {
         }
       }
       break;
-    case SDL_EVENT_KEY_UP:
+    }
+    case SDL_EVENT_KEY_UP: {
+      SDL_Keycode key = mEvent.key.key;
       if (mCurrentKeys.contains(key)) {
         mJustReleased.insert(key);
         mCurrentKeys.erase(key);
       }
       break;
-    case SDL_EVENT_QUIT:
-      mEventQueue.push(Event::Quit);
-      break;
+    }
     }
   }
 }

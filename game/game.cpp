@@ -18,8 +18,8 @@ void Game::processInput() {
     }
   }
 }
-void Game::update() {}
-void Game::render() {}
+void Game::update() { mRenderer.clear({211, 211, 255, 255}); }
+void Game::render() { mRenderer.present(); }
 void Game::shutdown() {}
 
 void Game::run() {
