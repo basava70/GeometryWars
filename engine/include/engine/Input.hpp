@@ -1,8 +1,8 @@
 #pragma once
 
-#include "engine/action.hpp"
-#include "engine/commands.hpp"
-#include "engine/event.hpp"
+#include "engine/Action.hpp"
+#include "engine/Commands.hpp"
+#include "engine/Event.hpp"
 #include <SDL3/SDL.h>
 #include <memory>
 #include <queue>

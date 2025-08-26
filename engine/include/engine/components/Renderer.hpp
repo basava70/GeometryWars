@@ -1,9 +1,9 @@
 #pragma once
-#include "engine/color.hpp"
-#include "engine/rect.hpp"
+#include "engine/Color.hpp"
+#include "engine/Rect.hpp"
 namespace engine::components {
 
-struct Sprite {
+struct RenderComponent {
 
   engine::RectF rect;
   engine::Color color;

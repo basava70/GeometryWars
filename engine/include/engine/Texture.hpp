@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/rect.hpp"
+#include "engine/Rect.hpp"
 #include <SDL3/SDL.h>
 #include <memory>
 

@@ -1,6 +1,6 @@
-#include "engine/input.hpp"
-#include "engine/action.hpp"
-#include "engine/commands.hpp"
+#include "engine/Input.hpp"
+#include "engine/Action.hpp"
+#include "engine/Commands.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_keycode.h>
 #include <memory>

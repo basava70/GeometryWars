@@ -1,5 +1,5 @@
-#include "engine/texture.hpp"
-#include "engine/rect.hpp"
+#include "engine/Texture.hpp"
+#include "engine/Rect.hpp"
 
 namespace engine {
 

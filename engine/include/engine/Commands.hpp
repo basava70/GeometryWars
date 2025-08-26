@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/event.hpp"
+#include "engine/Event.hpp"
 #include <cstdint>
 #include <queue>
 namespace engine {

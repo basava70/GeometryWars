@@ -1,5 +1,5 @@
 #pragma once
-#include "engine/color.hpp"
+#include "engine/Color.hpp"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_render.h>
 #include <memory>

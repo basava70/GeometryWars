@@ -1,8 +1,8 @@
 #pragma once
 
-#include "engine/input.hpp"
-#include "engine/renderer.hpp"
-#include "engine/window.hpp"
+#include "engine/Input.hpp"
+#include "engine/Renderer.hpp"
+#include "engine/Window.hpp"
 class Game {
 public:
   void run();

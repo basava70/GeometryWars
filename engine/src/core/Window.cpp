@@ -1,4 +1,4 @@
-#include "engine/window.hpp"
+#include "engine/Window.hpp"
 #include <print>
 
 bool engine::Window::init(std::string const &title, int width, int height) {

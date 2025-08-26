@@ -1,5 +1,5 @@
-#include "game.hpp"
-#include "engine/event.hpp"
+#include "Game.hpp"
+#include "engine/Event.hpp"
 
 bool Game::init() {
   bool windowSuccess = mWindow.init("Geometry Wars", 1000, 800);
