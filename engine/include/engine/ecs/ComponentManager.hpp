@@ -3,7 +3,6 @@
 #include "engine/ecs/Entity.hpp"
 #include <cassert>
 #include <cstddef>
-#include <limits>
 #include <memory.h>
 #include <memory>
 #include <print>
@@ -21,15 +20,9 @@ public:
 
 template <typename T> class ComponentArray : public IComponentArray {
 public:
-  void initialize() {
+  ComponentArray() : currEntitiesNum(0) {
     entityIdToDataIndex.fill(INVALID_INDEX);
     entityId.fill(INVALID_INDEX);
-    currEntitiesNum = 4;
-    data = {"a", "b", "c", "d"};
-    for (int i = 0; i < currEntitiesNum; i++) {
-      entityId[i] = i;
-      entityIdToDataIndex[i] = i;
-    }
   }
 
   void entityDestroyed(Entity entity) override { remove(entity); }
@@ -67,6 +60,13 @@ public:
     print();
   }
 
+  T *getComponent(Entity entity) {
+    std::size_t index = entityIdToDataIndex[entity];
+    if (index == INVALID_INDEX)
+      return nullptr;
+    return &data[index];
+  }
+
 private:
   static constexpr std::size_t INVALID_INDEX = MAX_ENTITIES;
   std::size_t currEntitiesNum;
@@ -74,6 +74,7 @@ private:
   std::array<Entity, MAX_ENTITIES> entityId;
   std::array<std::size_t, MAX_ENTITIES> entityIdToDataIndex;
 };
+
 class ComponentManager {
 
 public:

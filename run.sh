@@ -1,14 +1,18 @@
 #!/bin/bash
+set -e
 
 if [ ! -d build ]; then
   echo "No build directory found. Configuring CMake..."
   cmake -S . -B build
 fi
 
-if cmake --build build; then
-  echo "Build Suceeded. Running program..."
-  ./build/GeometryWars
+cmake --build build
+
+if [ "$1" == "test" ]; then
+  echo "Running tests..."
+  cd build
+  ctest --output-on-failure
 else
-  echo "Build failed!! Skipping program."
-  exit 1
+  echo "Running game..."
+  ./build/GeometryWars
 fi
