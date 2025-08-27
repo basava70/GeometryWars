@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
 
-MODE=${1:-all} # default = all (build game + tests)
+MODE=${1:-all} # default = all
 
-BUILD_DIR="build_${MODE}"
+# Single build folder
+BUILD_DIR="build"
 
 # Map mode → cmake flags
 case $MODE in
@@ -22,13 +23,11 @@ all)
   ;;
 esac
 
-# Configure if build dir doesn't exist
-if [ ! -d "$BUILD_DIR" ]; then
-  echo "Configuring CMake for mode: $MODE"
-  cmake -S . -B "$BUILD_DIR" $CMAKE_FLAGS
-fi
+# Configure or reconfigure (safe if build dir already exists)
+echo "Configuring CMake for mode: $MODE"
+cmake -S . -B "$BUILD_DIR" $CMAKE_FLAGS
 
-# Always rebuild (safe for incremental builds)
+# Build
 cmake --build "$BUILD_DIR"
 
 # Run what was requested
