@@ -10,8 +10,8 @@ TEST_CASE("ComponenetArray", "[ECS]") {
     compArray.add(1, "first");
     compArray.add(2, "second");
     compArray.add(3, "third");
-    auto c = compArray.getComponent(1);
+    auto c = compArray.getComponent(2);
     REQUIRE(c != nullptr);
-    REQUIRE(*c == "first");
+    REQUIRE(*c == "second");
   }
 }
