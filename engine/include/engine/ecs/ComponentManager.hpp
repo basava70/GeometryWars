@@ -1,13 +1,12 @@
 #pragma once
 
 #include "engine/ecs/Entity.hpp"
+#include <array>
 #include <cassert>
 #include <cstddef>
 #include <memory.h>
 #include <memory>
 #include <print>
-#include <typeindex>
-#include <unordered_map>
 
 namespace engine::ecs {
 
@@ -25,46 +24,56 @@ public:
     entityId.fill(INVALID_INDEX);
   }
 
-  void entityDestroyed(Entity entity) override { remove(entity); }
+  void entityDestroyed(Entity entity) override {
+    removeComponentDataImpl(entity);
+  }
 
   void print() {
     std::println("data : {} ", data);
     std::println("entityId : {} ", entityId);
     std::println("entityIdToDataIndex : {} ", entityIdToDataIndex);
   }
-  void remove(Entity id) {
+  void removeComponentDataImpl(Entity entity) {
 
-    if (entityIdToDataIndex[id] == INVALID_INDEX)
-      return;
+    assert(entityIdToDataIndex[entity] != INVALID_INDEX &&
+           "Entity is not attached to the component");
 
-    std::size_t removedIndex = entityIdToDataIndex[id];
-    data[removedIndex] = data[currEntitiesNum - 1];
-    Entity backEntity = entityId[currEntitiesNum - 1];
-    entityId[removedIndex] = backEntity;
-    entityIdToDataIndex[id] = INVALID_INDEX;
-    entityIdToDataIndex[backEntity] = removedIndex;
+    std::size_t removedIndex = entityIdToDataIndex[entity];
+    std::size_t lastIndex = currEntitiesNum - 1;
+
+    if (removedIndex != lastIndex) {
+      data[removedIndex] = data[lastIndex];
+      Entity backEntity = entityId[lastIndex];
+      entityId[removedIndex] = backEntity;
+      entityIdToDataIndex[backEntity] = removedIndex;
+    }
+
+    entityIdToDataIndex[entity] = INVALID_INDEX;
     currEntitiesNum--;
-    print();
+    // print();
   }
-  void add(Entity id, T const &dataPoint) {
+  void addComponentDataImpl(Entity entity, T const &dataPoint) {
+    assert(currEntitiesNum < MAX_ENTITIES &&
+           "Exceeding MAX_ENTITIES"); /// make sure total entities are less than
+                                      /// MAX_ENTITIES
     assert(
-        currEntitiesNum <
-        MAX_ENTITIES); /// make sure total entities are less than MAX_ENTITIES
-    assert(entityIdToDataIndex[id] ==
-           INVALID_INDEX); // check if the entity is not added to the component
-                           // already
+        entityIdToDataIndex[entity] == INVALID_INDEX &&
+        "Entity is already attached to the component"); // check if the entity
+                                                        // is not added to the
+                                                        // component already
 
-    data[++currEntitiesNum - 1] = dataPoint;
-    entityId[currEntitiesNum - 1] = id;
-    entityIdToDataIndex[id] = currEntitiesNum - 1;
-    print();
+    data[currEntitiesNum] = dataPoint;
+    entityId[currEntitiesNum] = entity;
+    entityIdToDataIndex[entity] = currEntitiesNum;
+    ++currEntitiesNum;
+    // print();
   }
 
-  T *getComponent(Entity entity) {
+  T &getComponentDataImpl(Entity entity) {
+    assert(entityIdToDataIndex[entity] != INVALID_INDEX &&
+           "Entity is not attached to the component");
     std::size_t index = entityIdToDataIndex[entity];
-    if (index == INVALID_INDEX)
-      return nullptr;
-    return &data[index];
+    return data[index];
   }
 
 private:
@@ -75,22 +84,58 @@ private:
   std::array<std::size_t, MAX_ENTITIES> entityIdToDataIndex;
 };
 
+using ComponentType = std::uint8_t;
+const ComponentType MAX_COMPONENTS = 64;
+
 class ComponentManager {
-
 public:
-  template <typename T> void registerComponent();
+  template <typename T> void registerComponent() {
 
-  template <typename T> void addComponent(Entity entity, T const &component);
+    ComponentType type = getComponentType<T>();
 
-  template <typename T> void removeComponent(Entity entity);
+    assert(type < MAX_COMPONENTS &&
+           "MAX_COMPONENTS reached, cannot register more components");
 
-  template <typename T> T &getComponent(Entity entity);
+    assert(!mComponentArrays[type] && "Registering component more than once");
+    mComponentArrays[type] = std::make_shared<ComponentArray<T>>();
+  }
 
-  void entityDestroyed(Entity entity);
+  template <typename T> ComponentType getComponentType() {
+    static ComponentType type = mNextComponentType++;
+    return type;
+  }
+
+  template <typename T>
+  void addComponentData(Entity entity, T const &component) {
+    GetComponentArray<T>()->addComponentDataImpl(entity, component);
+  }
+
+  template <typename T> void removeComponentData(Entity entity) {
+    GetComponentArray<T>()->removeComponentDataImpl(entity);
+  }
+
+  template <typename T> T &getComponentData(Entity entity) {
+    return GetComponentArray<T>()->getComponentDataImpl(entity);
+  }
+
+  void entityDestroyed(Entity entity) {
+    for (auto const &componentArray : mComponentArrays) {
+      componentArray->entityDestroyed(entity);
+    }
+  }
 
 private:
-  std::unordered_map<std::type_index, std::shared_ptr<IComponentArray>>
-      mComponentArrays;
+  std::array<std::shared_ptr<IComponentArray>, MAX_COMPONENTS> mComponentArrays;
+
+  ComponentType mNextComponentType{};
+
+  template <typename T> std::shared_ptr<ComponentArray<T>> GetComponentArray() {
+    ComponentType type = getComponentType<T>();
+    auto ptr =
+        std::static_pointer_cast<ComponentArray<T>>(mComponentArrays[type]);
+    assert(ptr && "Component not registered");
+    return ptr;
+  }
 };
 
 } // namespace engine::ecs
