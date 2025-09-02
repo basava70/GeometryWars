@@ -1,12 +1,10 @@
 #pragma once
 
 #include "engine/ecs/Entity.hpp"
+#include "engine/ecs/SparseSet.hpp"
 #include <array>
 #include <cassert>
-#include <cstddef>
-#include <memory.h>
 #include <memory>
-#include <print>
 
 namespace engine::ecs {
 
@@ -19,69 +17,23 @@ public:
 
 template <typename T> class ComponentArray : public IComponentArray {
 public:
-  ComponentArray() : currEntitiesNum(0) {
-    entityIdToDataIndex.fill(INVALID_INDEX);
-    entityId.fill(INVALID_INDEX);
-  }
+  ComponentArray() : mCurrEntitySize(0) {}
 
   void entityDestroyed(Entity entity) override {
     removeComponentDataImpl(entity);
   }
 
-  void print() {
-    std::println("data : {} ", data);
-    std::println("entityId : {} ", entityId);
-    std::println("entityIdToDataIndex : {} ", entityIdToDataIndex);
-  }
-  void removeComponentDataImpl(Entity entity) {
-
-    assert(entityIdToDataIndex[entity] != INVALID_INDEX &&
-           "Entity is not attached to the component");
-
-    std::size_t removedIndex = entityIdToDataIndex[entity];
-    std::size_t lastIndex = currEntitiesNum - 1;
-
-    if (removedIndex != lastIndex) {
-      data[removedIndex] = data[lastIndex];
-      Entity backEntity = entityId[lastIndex];
-      entityId[removedIndex] = backEntity;
-      entityIdToDataIndex[backEntity] = removedIndex;
-    }
-
-    entityIdToDataIndex[entity] = INVALID_INDEX;
-    currEntitiesNum--;
-    // print();
-  }
+  void removeComponentDataImpl(Entity entity) { mSparseSet.remove(entity); }
   void addComponentDataImpl(Entity entity, T const &dataPoint) {
-    assert(currEntitiesNum < MAX_ENTITIES &&
-           "Exceeding MAX_ENTITIES"); /// make sure total entities are less than
-                                      /// MAX_ENTITIES
-    assert(
-        entityIdToDataIndex[entity] == INVALID_INDEX &&
-        "Entity is already attached to the component"); // check if the entity
-                                                        // is not added to the
-                                                        // component already
-
-    data[currEntitiesNum] = dataPoint;
-    entityId[currEntitiesNum] = entity;
-    entityIdToDataIndex[entity] = currEntitiesNum;
-    ++currEntitiesNum;
-    // print();
+    mSparseSet.add(entity, dataPoint);
   }
 
-  T &getComponentDataImpl(Entity entity) {
-    assert(entityIdToDataIndex[entity] != INVALID_INDEX &&
-           "Entity is not attached to the component");
-    std::size_t index = entityIdToDataIndex[entity];
-    return data[index];
-  }
+  T &getComponentDataImpl(Entity entity) { return mSparseSet.getData(entity); }
 
 private:
   static constexpr std::size_t INVALID_INDEX = MAX_ENTITIES;
-  std::size_t currEntitiesNum;
-  std::array<T, MAX_ENTITIES> data;
-  std::array<Entity, MAX_ENTITIES> entityId;
-  std::array<std::size_t, MAX_ENTITIES> entityIdToDataIndex;
+  std::size_t mCurrEntitySize;
+  SparseSet<T> mSparseSet;
 };
 
 using ComponentType = std::uint8_t;
