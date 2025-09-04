@@ -36,9 +36,6 @@ private:
   SparseSet<T> mSparseSet;
 };
 
-using ComponentType = std::uint8_t;
-const ComponentType MAX_COMPONENTS = 64;
-
 class ComponentManager {
 public:
   template <typename T> void registerComponent() {
