@@ -20,19 +20,19 @@ Entity EntityManager::createEntity() {
 }
 
 void EntityManager::destroyEntity(Entity entity) {
-  assert(entity < MAX_ENTITIES && "entity is out of bounds");
+  assert(entity < mCurrEntities && "entity is out of bounds");
   mFreeEntities.push_back(entity);
   mCurrEntities--;
   mSignatures[entity].reset();
 }
 
 void EntityManager::setSignature(Entity entity, Signature signature) {
-  assert(entity < MAX_ENTITIES && "entity is out of bounds");
+  assert(entity < mCurrEntities && "entity is out of bounds");
   mSignatures[entity] = signature;
 }
 
 Signature EntityManager::getSignature(Entity entity) {
-  assert(entity < MAX_ENTITIES && "entity is out of bounds");
+  assert(entity < mCurrEntities && "entity is out of bounds");
   return mSignatures[entity];
 }
 
