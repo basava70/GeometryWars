@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-namespace engine {
+namespace engine::core {
 
 struct WindowDeleter {
   void operator()(SDL_Window *window) {
@@ -37,4 +37,4 @@ private:
   SDL_WindowFlags mFlags{};
 };
 
-} // namespace engine
+} // namespace engine::core

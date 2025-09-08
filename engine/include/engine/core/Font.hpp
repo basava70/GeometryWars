@@ -5,6 +5,8 @@
 #include <SDL3_ttf/SDL_ttf.h>
 #include <string>
 
+namespace engine::core {
+
 /**
  * \brief Manages the font for the engine
  *
@@ -19,3 +21,4 @@ public:
 private:
   TTF_Font *mFont{nullptr};
 };
+} // namespace engine::core

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "engine/Rect.hpp"
+#include "engine/core/Rect.hpp"
 #include <SDL3/SDL.h>
 #include <memory>
 
-namespace engine {
+namespace engine::core {
 
 template <typename T> struct TextureDeleter;
 
@@ -31,4 +31,4 @@ struct Texture {
   RectF mRect;
 };
 
-} // namespace engine
+} // namespace engine::core

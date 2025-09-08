@@ -1,15 +1,15 @@
 #pragma once
 
-#include "engine/Action.hpp"
-#include "engine/Commands.hpp"
-#include "engine/Event.hpp"
+#include "engine/core/Action.hpp"
+#include "engine/core/Commands.hpp"
+#include "engine/core/Event.hpp"
 #include <SDL3/SDL.h>
 #include <memory>
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
 
-namespace engine {
+namespace engine::core {
 
 class Input {
 public:
@@ -42,4 +42,4 @@ private:
   std::queue<Command *> mCommandQueue;
   std::queue<Event> mEventQueue;
 };
-} // namespace engine
+} // namespace engine::core

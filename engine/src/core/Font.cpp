@@ -1,9 +1,11 @@
-#include "engine/Font.hpp"
+#include "engine/core/Font.hpp"
 #include <SDL3/SDL_error.h>
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_surface.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include <print>
+
+namespace engine::core {
 
 bool Font::init(std::string const &path, std::size_t fontSize) {
   if (!TTF_Init()) {
@@ -29,3 +31,4 @@ Font::~Font() {
   }
   TTF_Quit();
 }
+} // namespace engine::core

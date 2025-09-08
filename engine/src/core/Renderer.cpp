@@ -1,7 +1,7 @@
-#include "engine/Renderer.hpp"
+#include "engine/core/Renderer.hpp"
 #include <print>
 
-namespace engine {
+namespace engine::core {
 
 bool Renderer::init(SDL_Window *window) {
   SDL_Renderer *raw = SDL_CreateRenderer(window, 0);
@@ -26,4 +26,4 @@ void Renderer::shutdown() noexcept { mRenderer.reset(); }
 
 Renderer::~Renderer() { shutdown(); }
 
-} // namespace engine
+} // namespace engine::core

@@ -1,7 +1,9 @@
-#include "engine/Window.hpp"
+#include "engine/core/Window.hpp"
 #include <print>
 
-bool engine::Window::init(std::string const &title, int width, int height) {
+namespace engine::core {
+
+bool Window::init(std::string const &title, int width, int height) {
   SDL_Window *raw = SDL_CreateWindow(title.c_str(), width, height, mFlags);
   if (!raw) {
     std::println("Error creating window: {}", SDL_GetError());
@@ -14,8 +16,9 @@ bool engine::Window::init(std::string const &title, int width, int height) {
   return true;
 }
 
-SDL_Window *engine::Window::get() const { return mWindow.get(); }
+SDL_Window *Window::get() const { return mWindow.get(); }
 
-void engine::Window::shutdown() noexcept { mWindow.reset(); }
+void Window::shutdown() noexcept { mWindow.reset(); }
 
-engine::Window::~Window() { shutdown(); }
+Window::~Window() { shutdown(); }
+} // namespace engine::core

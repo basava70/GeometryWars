@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL3/SDL_rect.h>
-namespace engine {
+namespace engine::core {
 /**
  * \brief Generic rectangle class with float precision
  *
@@ -25,4 +25,4 @@ struct RectF {
    */
   inline SDL_FRect toSDL() const { return {x - w / 2.0f, y - h / 2.0f, w, h}; }
 };
-} // namespace engine
+} // namespace engine::core

@@ -1,10 +1,10 @@
 #pragma once
-#include "engine/Color.hpp"
+#include "engine/core/Color.hpp"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_render.h>
 #include <memory>
 
-namespace engine {
+namespace engine::core {
 
 struct RendererDeleter {
   void operator()(SDL_Renderer *renderer) {
@@ -28,4 +28,4 @@ public:
 private:
   RendererPtr mRenderer;
 };
-} // namespace engine
+} // namespace engine::core

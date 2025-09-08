@@ -1,5 +1,5 @@
 #include "engine/ecs/ComponentManager.hpp"
-#include "engine/ecs/Entity.hpp"
+#include "engine/ecs/EntityManager.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <string>
 
@@ -53,12 +53,12 @@ TEST_CASE("ComponentManager", "[ECS]") {
   engine::ecs::ComponentManager compManager;
 
   engine::ecs::EntityManager entityManager;
-  engine::ecs::Entity first = entityManager.CreateEntity();
-  engine::ecs::Entity second = entityManager.CreateEntity();
-  engine::ecs::Entity third = entityManager.CreateEntity();
-  engine::ecs::Entity fourth = entityManager.CreateEntity();
-  engine::ecs::Entity fifth = entityManager.CreateEntity();
-  engine::ecs::Entity sixth = entityManager.CreateEntity();
+  engine::ecs::Entity first = entityManager.createEntity();
+  engine::ecs::Entity second = entityManager.createEntity();
+  engine::ecs::Entity third = entityManager.createEntity();
+  engine::ecs::Entity fourth = entityManager.createEntity();
+  engine::ecs::Entity fifth = entityManager.createEntity();
+  engine::ecs::Entity sixth = entityManager.createEntity();
 
   compManager.registerComponent<std::string>();
   compManager.registerComponent<int>();

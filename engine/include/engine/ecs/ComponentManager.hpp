@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/ecs/Entity.hpp"
+#include "engine/ecs/EntityManager.hpp"
 #include "engine/ecs/SparseSet.hpp"
 #include <array>
 #include <cassert>
@@ -25,7 +25,7 @@ public:
 
   void removeComponentDataImpl(Entity entity) { mSparseSet.remove(entity); }
   void addComponentDataImpl(Entity entity, T const &dataPoint) {
-    mSparseSet.add(entity, dataPoint);
+    mSparseSet.insert(entity, dataPoint);
   }
 
   T &getComponentDataImpl(Entity entity) { return mSparseSet.getData(entity); }

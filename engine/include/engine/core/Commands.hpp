@@ -1,9 +1,9 @@
 #pragma once
 
-#include "engine/Event.hpp"
+#include "engine/core/Event.hpp"
 #include <cstdint>
 #include <queue>
-namespace engine {
+namespace engine::core {
 
 using Entity = std::uint32_t;
 
@@ -23,4 +23,4 @@ private:
   std::queue<Event> &mEngineEventQueue;
 };
 
-} // namespace engine
+} // namespace engine::core

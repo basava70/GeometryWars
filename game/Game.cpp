@@ -1,5 +1,5 @@
 #include "Game.hpp"
-#include "engine/Event.hpp"
+#include "engine/core/Event.hpp"
 
 bool Game::init() {
   bool windowSuccess = mWindow.init("Geometry Wars", 1000, 800);
@@ -12,7 +12,7 @@ void Game::processInput() {
   mInput.processEvent();
   while (mInput.hasPendingEvents()) {
     switch (mInput.popEngineEvent()) {
-    case engine::Event::Quit:
+    case engine::core::Event::Quit:
       mIsRunning = false;
       break;
     }

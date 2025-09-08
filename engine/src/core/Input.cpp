@@ -1,12 +1,12 @@
-#include "engine/Input.hpp"
-#include "engine/Action.hpp"
-#include "engine/Commands.hpp"
+#include "engine/core/Input.hpp"
+#include "engine/core/Action.hpp"
+#include "engine/core/Commands.hpp"
 #include <SDL3/SDL_events.h>
 #include <SDL3/SDL_keycode.h>
 #include <memory>
 #include <queue>
 
-namespace engine {
+namespace engine::core {
 
 bool Input::init() {
   mCurrentKeys.clear();
@@ -88,4 +88,4 @@ Event Input::popEngineEvent() {
   return event;
 }
 
-} // namespace engine
+} // namespace engine::core

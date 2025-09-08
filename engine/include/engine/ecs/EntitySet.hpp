@@ -1,5 +1,5 @@
 #pragma once
-#include "engine/ecs/Entity.hpp"
+#include "engine/ecs/EntityManager.hpp"
 #include <cassert>
 #include <print>
 
@@ -13,9 +13,10 @@ public:
     mDenseVector.reserve(MAX_ENTITIES);
   }
 
-  void add(Entity entity) {
+  void insert(Entity entity) {
     assert(entity < MAX_ENTITIES &&
            "Given entity is greater than EntitySet array size");
+    assert(!contains(entity) && "Entity is already in the SparseSet");
     mDenseVector.push_back(entity);
     mSparseArray[entity] = mCurrentSize;
     mCurrentSize++;
@@ -23,7 +24,8 @@ public:
   }
 
   void remove(Entity entity) {
-    assert(contains(entity) && "Entity is not attached to the EntitySet");
+    if (!contains(entity))
+      return;
     std::size_t removedIndex = mSparseArray[entity];
     std::size_t lastIndex = mCurrentSize - 1;
     if (removedIndex != lastIndex) {

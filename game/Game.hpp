@@ -1,8 +1,8 @@
 #pragma once
 
-#include "engine/Input.hpp"
-#include "engine/Renderer.hpp"
-#include "engine/Window.hpp"
+#include "engine/core/Input.hpp"
+#include "engine/core/Renderer.hpp"
+#include "engine/core/Window.hpp"
 class Game {
 public:
   void run();
@@ -10,9 +10,9 @@ public:
 
 private:
   bool mIsRunning = false;
-  engine::Window mWindow;
-  engine::Renderer mRenderer;
-  engine::Input mInput;
+  engine::core::Window mWindow;
+  engine::core::Renderer mRenderer;
+  engine::core::Input mInput;
 
   bool init();
   void processInput();

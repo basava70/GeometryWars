@@ -16,16 +16,17 @@ public:
 
   SparseSet() { mDataVector.reserve(MAX_ENTITIES); }
 
-  void add(Entity entity, T const &dataPoint) {
+  void insert(Entity entity, T const &dataPoint) {
     assert(entity < MAX_ENTITIES &&
            "Given entity is greater than SparseSet array size");
-    Base::add(entity);
+    Base::insert(entity);
     mDataVector.push_back(dataPoint);
     // print();
   }
 
   void remove(Entity entity) {
-    assert(contains(entity) && "Entity is not attached to the SparseSet");
+    if (!contains(entity))
+      return;
     std::size_t removedIndex = mSparseArray[entity];
     std::size_t lastIndex = mCurrentSize - 1;
     if (removedIndex != lastIndex) {

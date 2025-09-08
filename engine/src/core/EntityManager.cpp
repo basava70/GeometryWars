@@ -1,7 +1,8 @@
-#include "engine/ecs/Entity.hpp"
+#include "engine/ecs/EntityManager.hpp"
 #include <cassert>
 
 namespace engine::ecs {
+EntityManager::EntityManager() {}
 
 Entity EntityManager::createEntity() {
   assert(mCurrEntities < MAX_ENTITIES &&
