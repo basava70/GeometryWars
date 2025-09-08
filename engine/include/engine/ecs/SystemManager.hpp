@@ -24,8 +24,8 @@ class SystemManager {
 
 public:
   SystemManager() {
-    mSystems.reserve(MAX_SYSTEMS);
-    mSignatures.reserve(MAX_SYSTEMS);
+    mSystems.resize(MAX_SYSTEMS);
+    mSignatures.resize(MAX_SYSTEMS);
   }
 
   template <typename T> void registerSystem() {
@@ -36,12 +36,6 @@ public:
 
     assert(!mSystems[type] && "Registering system more than once");
     mSystems[type] = std::make_shared<T>();
-  }
-
-  template <typename T> SystemType getSystemType() {
-    static_assert(std::is_base_of_v<ISystem, T>, "T must inherit from ISystem");
-    static SystemType type = mNextSystemType++;
-    return type;
   }
 
   template <typename T> std::shared_ptr<T> getSystem() {
@@ -58,19 +52,21 @@ public:
 
   template <typename T> void EntityDestroyed(Entity entity) {
     for (auto &system : mSystems) {
-      system->mEntitySet.remove(entity);
+      if (system)
+        system->mEntitySet.remove(entity);
     }
   }
 
-  template <typename T>
   void EntitySignatureChanged(Entity entity, Signature const &entitySignature) {
-    auto type = getSystemType<T>();
-    auto &system = mSystems[type];
-    Signature const &systemSignature = mSignatures[type];
-    if ((systemSignature & entitySignature) == systemSignature) {
-      system->mEntitySet.add(entity);
-    } else {
-      system->mEntitySet.remove(entity);
+    for (SystemType type = 0; type < mNextSystemType; type++) {
+      auto &system = mSystems[type];
+      if (!system)
+        continue;
+      Signature const &systemSignature = mSignatures[type];
+      if ((entitySignature & systemSignature) == systemSignature)
+        mSystems[type]->mEntitySet.insert(entity);
+      else
+        mSystems[type]->mEntitySet.remove(entity);
     }
   }
 
@@ -78,6 +74,12 @@ private:
   std::vector<std::shared_ptr<ISystem>> mSystems;
   SystemType mNextSystemType{0};
   std::vector<Signature> mSignatures;
+
+  template <typename T> SystemType getSystemType() {
+    static_assert(std::is_base_of_v<ISystem, T>, "T must inherit from ISystem");
+    static SystemType type = mNextSystemType++;
+    return type;
+  }
 };
 
 } // namespace engine::ecs

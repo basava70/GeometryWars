@@ -11,6 +11,12 @@ TEST_CASE("ComponenetArray", "[ECS]") {
   compArray.addComponentDataImpl(4, "four");
   compArray.addComponentDataImpl(5, "five");
 
+  SECTION("Remove something that doesnt exist") {
+    // should assert
+    // compArray.removeComponentDataImpl(5);
+    // auto c = compArray.getComponentDataImpl(6);
+  }
+
   SECTION("Remove first, last and middle elements") {
     compArray.removeComponentDataImpl(1);
     auto c = compArray.getComponentDataImpl(5);

@@ -47,7 +47,10 @@ public:
     return mSparseArray;
   }
 
-  bool contains(Entity entity) { return mSparseArray[entity] != INVALID_INDEX; }
+  bool contains(Entity entity) {
+    assert(entity < MAX_ENTITIES && "Entity is out of bounds");
+    return mSparseArray[entity] != INVALID_INDEX;
+  }
 
   std::size_t getCurrentSize() { return mCurrentSize; }
 
