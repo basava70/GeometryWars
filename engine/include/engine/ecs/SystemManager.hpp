@@ -4,7 +4,6 @@
 #include "engine/ecs/EntitySet.hpp"
 #include <cassert>
 #include <memory>
-#include <type_traits>
 #include <vector>
 namespace engine::ecs {
 
@@ -50,14 +49,14 @@ public:
     mSignatures[type] = signature;
   }
 
-  template <typename T> void EntityDestroyed(Entity entity) {
+  void entityDestroyed(Entity entity) {
     for (auto &system : mSystems) {
       if (system)
         system->mEntitySet.remove(entity);
     }
   }
 
-  void EntitySignatureChanged(Entity entity, Signature const &entitySignature) {
+  void entitySignatureChanged(Entity entity, Signature const &entitySignature) {
     for (SystemType type = 0; type < mNextSystemType; type++) {
       auto &system = mSystems[type];
       if (!system)
@@ -72,11 +71,10 @@ public:
 
 private:
   std::vector<std::shared_ptr<ISystem>> mSystems;
-  SystemType mNextSystemType{0};
+  inline static SystemType mNextSystemType{0};
   std::vector<Signature> mSignatures;
 
   template <typename T> SystemType getSystemType() {
-    static_assert(std::is_base_of_v<ISystem, T>, "T must inherit from ISystem");
     static SystemType type = mNextSystemType++;
     return type;
   }

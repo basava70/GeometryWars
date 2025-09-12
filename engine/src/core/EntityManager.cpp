@@ -10,30 +10,34 @@ Entity EntityManager::createEntity() {
 
   /// If there are free entities (from destroyed entities) we create
   /// new entity from it
+  Entity id;
   if (!mFreeEntities.empty()) {
-    Entity id = mFreeEntities.back();
+    id = mFreeEntities.back();
     mFreeEntities.pop_back();
     mCurrEntities++;
-    return id;
+  } else {
+    id = mNextEntityId++;
   }
   mCurrEntities++;
-  return mNextEntityId++;
+  mAlive[id] = true;
+  return id;
 }
 
 void EntityManager::destroyEntity(Entity entity) {
-  assert(entity < mCurrEntities && "entity is out of bounds");
+  assert(entity < MAX_ENTITIES && mAlive[entity] && "Invalid entity");
+  mAlive[entity] = false;
   mFreeEntities.push_back(entity);
   mCurrEntities--;
   mSignatures[entity].reset();
 }
 
 void EntityManager::setSignature(Entity entity, Signature signature) {
-  assert(entity < mCurrEntities && "entity is out of bounds");
+  assert(entity < MAX_ENTITIES && mAlive[entity] && "Invalid entity");
   mSignatures[entity] = signature;
 }
 
 Signature EntityManager::getSignature(Entity entity) {
-  assert(entity < mCurrEntities && "entity is out of bounds");
+  assert(entity < MAX_ENTITIES && mAlive[entity] && "Invalid entity");
   return mSignatures[entity];
 }
 

@@ -26,6 +26,7 @@ private:
   std::vector<Entity> mFreeEntities;
   std::array<Signature, MAX_ENTITIES> mSignatures;
   std::size_t mCurrEntities{0};
+  std::array<bool, MAX_ENTITIES> mAlive{};
 };
 
 } // namespace engine::ecs
