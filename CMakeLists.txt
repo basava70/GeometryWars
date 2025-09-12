@@ -11,6 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 find_package(SDL3 REQUIRED CONFIG)
 find_package(SDL3_image  REQUIRED CONFIG)
 find_package(SDL3_ttf REQUIRED CONFIG)
+find_package(EnTT REQUIRED)
 
 # ============================================
 # Engine Ligrary
@@ -23,7 +24,7 @@ target_include_directories(engine PUBLIC ${ENGINE_INCLUDE})
 
 # Link SDL libs to the engine
 target_link_libraries(engine PUBLIC SDL3::SDL3 SDL3_image::SDL3_image
-SDL3_ttf::SDL3_ttf)
+SDL3_ttf::SDL3_ttf EnTT::EnTT)
 
 # ============================================
 # Game executable
