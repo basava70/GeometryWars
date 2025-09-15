@@ -3,18 +3,17 @@
 #include <SDL3/SDL_pixels.h>
 #include <SDL3/SDL_surface.h>
 #include <SDL3_ttf/SDL_ttf.h>
-#include <print>
 
 namespace engine::core {
 
 bool Font::init(std::string const &path, std::size_t fontSize) {
   if (!TTF_Init()) {
-    std::println("Error initializing TTF: {}", SDL_GetError());
+    SDL_Log("Error initializing TTF: %s", SDL_GetError());
     return false;
   }
   mFont = TTF_OpenFont(path.c_str(), fontSize);
   if (!mFont) {
-    std::println("Error loading font: {}", SDL_GetError());
+    SDL_Log("Error loading font: %s", SDL_GetError());
     return false;
   }
   return true;

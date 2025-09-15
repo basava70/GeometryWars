@@ -27,6 +27,9 @@ public:
 
   void shutdown() noexcept;
 
+  int getHeight() { return mHeight; }
+  int getWidth() { return mWidth; }
+
   ~Window();
 
 private:

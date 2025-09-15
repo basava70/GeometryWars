@@ -1,10 +1,10 @@
 #pragma once
 
-#include "engine/core/Rect.hpp"
 #include <SDL3/SDL.h>
 #include <memory>
 
 namespace engine::core {
+class Renderer;
 
 template <typename T> struct TextureDeleter;
 
@@ -17,18 +17,27 @@ template <> struct TextureDeleter<SDL_Texture> {
 
 using SDLTexturePtr = std::unique_ptr<SDL_Texture, TextureDeleter<SDL_Texture>>;
 
-struct Texture {
+class Texture {
+public:
+  Texture() = default;
+
   Texture(Texture const &) = delete;
   Texture &operator=(Texture const &) = delete;
-  Texture(Texture &&) noexcept = delete;
-  Texture &operator=(Texture &&) noexcept = delete;
 
-  RectF getRect() const;
+  Texture(Texture &&) noexcept = default;
+  Texture &operator=(Texture &&) noexcept = default;
 
-  template <typename T> T *get() const;
+  bool loadFromFile(Renderer const &renderer, std::string const &path);
 
+  int width() const { return mWidth; }
+  int height() const { return mHeight; }
+
+  SDL_Texture *get() const { return mTexture.get(); }
+
+private:
   SDLTexturePtr mTexture;
-  RectF mRect;
+  int mWidth{0};
+  int mHeight{0};
 };
 
 } // namespace engine::core

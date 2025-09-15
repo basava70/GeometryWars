@@ -16,7 +16,10 @@ find_package(EnTT REQUIRED)
 # ============================================
 # Engine Ligrary
 # ============================================
-file(GLOB_RECURSE ENGINE_SOURCES CONFIGURE_DEPENDS engine/src/*.cpp)
+file(GLOB_RECURSE ENGINE_CORE_SOURCES CONFIGURE_DEPENDS engine/src/core/*.cpp)
+file(GLOB_RECURSE ENGINE_SYSTEM_SOURCES CONFIGURE_DEPENDS
+  engine/src/systems/*.cpp)
+set(ENGINE_SOURCES ${ENGINE_CORE_SOURCES} ${ENGINE_SYSTEM_SOURCES})
 set(ENGINE_INCLUDE ${CMAKE_SOURCE_DIR}/engine/include)
 
 add_library(engine STATIC ${ENGINE_SOURCES})

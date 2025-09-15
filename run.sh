@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-MODE=${1:-all} # default = all
+MODE=${1:-game} # default = just game
 
 # Single build folder
 BUILD_DIR="build"

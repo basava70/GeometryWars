@@ -73,7 +73,7 @@ void Input::dispatchAction(Action action) {
   }
 }
 
-bool Input::hasPendingCommand() { return !mCommandQueue.empty(); }
+bool Input::hasPendingCommands() { return !mCommandQueue.empty(); }
 bool Input::hasPendingEvents() { return !mEventQueue.empty(); }
 
 Command *Input::popCommand() {

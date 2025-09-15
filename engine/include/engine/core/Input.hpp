@@ -25,7 +25,7 @@ public:
   void bindAction(Action, std::unique_ptr<Command>);
   void dispatchAction(Action);
 
-  bool hasPendingCommand();
+  bool hasPendingCommands();
   bool hasPendingEvents();
   Command *popCommand();
   Event popEngineEvent();

@@ -1,14 +1,22 @@
 #include "engine/core/Renderer.hpp"
-#include <print>
+#include "engine/components/Components.hpp"
+#include "engine/core/Texture.hpp"
+#include "engine/core/Window.hpp"
+#include <SDL3/SDL_log.h>
+#include <SDL3/SDL_rect.h>
+#include <SDL3/SDL_render.h>
 
 namespace engine::core {
+using namespace engine::components;
 
-bool Renderer::init(SDL_Window *window) {
-  SDL_Renderer *raw = SDL_CreateRenderer(window, 0);
+bool Renderer::init(Window &window) {
+  SDL_Renderer *raw = SDL_CreateRenderer(window.get(), 0);
   if (!raw) {
-    std::println("Error creating Renderer {}", SDL_GetError());
+    SDL_Log("Error creating Renderer: %s", SDL_GetError());
     return false;
   }
+  SDL_SetRenderLogicalPresentation(raw, window.getWidth(), window.getHeight(),
+                                   SDL_LOGICAL_PRESENTATION_LETTERBOX);
   mRenderer.reset(raw);
   return true;
 }
@@ -23,6 +31,16 @@ void Renderer::clear(Color color) {
 void Renderer::present() { SDL_RenderPresent(get()); }
 
 void Renderer::shutdown() noexcept { mRenderer.reset(); }
+
+void Renderer::draw(Renderable const &renderable, Transform const &transform) {
+
+  SDL_FRect dst{transform.x - transform.width / 2,
+                transform.y - transform.height / 2, transform.width,
+                transform.height};
+
+  SDL_RenderTexture(mRenderer.get(), renderable.mTexture->get(),
+                    &renderable.mSrcRect, &dst);
+}
 
 Renderer::~Renderer() { shutdown(); }
 
