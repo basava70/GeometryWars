@@ -20,7 +20,7 @@ struct RendererDeleter {
 
 class Renderer {
 public:
-  bool init(Window &);
+  bool init(Window &, int width, int height);
   void clear(Color color = {0, 0, 0, 255});
   void present();
   SDL_Renderer *get() const;

@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "GameConfig.hpp"
 #include "engine/components/Components.hpp"
 #include "engine/core/Action.hpp"
 #include "engine/core/Commands.hpp"
@@ -10,6 +11,7 @@
 #include <SDL3/SDL_timer.h>
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 using namespace engine::core;
 using namespace engine::components;
@@ -17,8 +19,10 @@ using namespace engine::systems;
 
 bool Game::init() {
 
-  bool windowSuccess = mWindow.init("Geometry Wars", 1000, 800);
-  bool rendererSucess = mRenderer.init(mWindow);
+  bool windowSuccess = mWindow.init("Geometry Wars", GameConfig::cLogicalWidth,
+                                    GameConfig::cLogicalHeight);
+  bool rendererSucess = mRenderer.init(mWindow, GameConfig::cLogicalWidth,
+                                       GameConfig::cLogicalHeight);
 
   mInput.bindKey(SDLK_H, Action::MoveLeft);
   mInput.bindKey(SDLK_L, Action::MoveRight);
@@ -32,13 +36,11 @@ bool Game::init() {
 
   mPlayer = mRegistry.create();
   auto sheet = std::make_shared<engine::core::Texture>();
-  bool loadSuccess = sheet->loadFromFile(mRenderer, "assets/vectorGlow.png");
+  bool loadSuccess = sheet->loadFromFile(mRenderer, "assets/birds.jpg");
 
-  mRegistry.emplace<Transform>(mPlayer, 200.0f, 200.0f, mSpriteSize,
-                               mSpriteSize, 0.0f);
-  mRegistry.emplace<Velocity>(mPlayer, 0.f, 0.f);
+  mRegistry.emplace<Transform>(mPlayer, 200.f, 200.f, 80.f, 60.f, 0.f);
   mRegistry.emplace<Renderable>(mPlayer, sheet,
-                                SDL_FRect{0.f, 0.f, mSpriteSize, mSpriteSize});
+                                SDL_FRect{150.f, 425.f, 625.f, 450.f});
 
   return windowSuccess && rendererSucess && loadSuccess;
 }
@@ -63,6 +65,7 @@ void Game::processInput() {
 void Game::update(double dt) {
   mRenderer.clear({0, 0, 0, 255});
   movementSystem(mRegistry, dt);
+  // animationSystem(mRegistry, dt);
   renderSystem(mRegistry, mRenderer);
 }
 
@@ -72,12 +75,12 @@ void Game::shutdown() {}
 void Game::run() {
   if (init()) {
 
-    double const TARGET_FPS = 120.0;
-    double const TARGET_FRAME_TIME = 1.0 / TARGET_FPS;
+    double const TARGET_FRAME_TIME = 1.0 / GameConfig::cExpectedFrameRate;
 
     uint64_t lastCounter = SDL_GetPerformanceCounter();
 
     mIsRunning = true;
+
     while (mIsRunning) {
       uint64_t frameStart = SDL_GetPerformanceCounter();
       double dt = (frameStart - lastCounter) /

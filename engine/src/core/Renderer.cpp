@@ -9,13 +9,13 @@
 namespace engine::core {
 using namespace engine::components;
 
-bool Renderer::init(Window &window) {
+bool Renderer::init(Window &window, int width, int height) {
   SDL_Renderer *raw = SDL_CreateRenderer(window.get(), 0);
   if (!raw) {
     SDL_Log("Error creating Renderer: %s", SDL_GetError());
     return false;
   }
-  SDL_SetRenderLogicalPresentation(raw, window.getWidth(), window.getHeight(),
+  SDL_SetRenderLogicalPresentation(raw, width, height,
                                    SDL_LOGICAL_PRESENTATION_LETTERBOX);
   mRenderer.reset(raw);
   return true;
