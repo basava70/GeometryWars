@@ -29,18 +29,35 @@ bool Game::init() {
   mInput.bindKey(SDLK_J, Action::MoveDown);
   mInput.bindKey(SDLK_K, Action::MoveUp);
 
-  mInput.bindAction(Action::MoveLeft, std::make_unique<MoveLeftCommand>());
-  mInput.bindAction(Action::MoveRight, std::make_unique<MoveRightCommand>());
-  mInput.bindAction(Action::MoveDown, std::make_unique<MoveDownCommand>());
-  mInput.bindAction(Action::MoveUp, std::make_unique<MoveUpCommand>());
+  mInput.bindAction(Action::MoveLeft, std::make_unique<MoveLeftCommand>(
+                                          GameConfig::cPlayerSpeed));
+  mInput.bindAction(Action::MoveRight, std::make_unique<MoveRightCommand>(
+                                           GameConfig::cPlayerSpeed));
+  mInput.bindAction(Action::MoveDown, std::make_unique<MoveDownCommand>(
+                                          GameConfig::cPlayerSpeed));
+  mInput.bindAction(Action::MoveUp,
+                    std::make_unique<MoveUpCommand>(GameConfig::cPlayerSpeed));
 
   mPlayer = mRegistry.create();
   auto sheet = std::make_shared<engine::core::Texture>();
-  bool loadSuccess = sheet->loadFromFile(mRenderer, "assets/birds.jpg");
+  bool loadSuccess = sheet->loadFromFile(mRenderer, "assets/Run.png");
 
-  mRegistry.emplace<Transform>(mPlayer, 200.f, 200.f, 80.f, 60.f, 0.f);
-  mRegistry.emplace<Renderable>(mPlayer, sheet,
-                                SDL_FRect{150.f, 425.f, 625.f, 450.f});
+  mRegistry.emplace<Transform>(mPlayer, 500.f, 500.f, GameConfig::cPlayerSize,
+                               GameConfig::cPlayerSize, 0.f);
+  const int numberOfSprites = 8;
+  const float spriteWidth = 1024.f / numberOfSprites;
+  const float spriteHeight = 128.f;
+  mRegistry.emplace<Renderable>(
+      mPlayer, sheet, SDL_FRect{0.0f, 0.0f, spriteWidth, spriteHeight});
+  mRegistry.emplace<Velocity>(mPlayer, 0, 0);
+
+  std::vector<SDL_FRect> frames;
+
+  for (int i = 0; i < numberOfSprites; i++) {
+    frames.push_back(
+        SDL_FRect{i * spriteWidth, 0.0f, spriteWidth, spriteHeight});
+  }
+  mRegistry.emplace<Animation>(mPlayer, frames, 0.0f, 0.1f, 0.0f, true);
 
   return windowSuccess && rendererSucess && loadSuccess;
 }
@@ -65,7 +82,7 @@ void Game::processInput() {
 void Game::update(double dt) {
   mRenderer.clear({0, 0, 0, 255});
   movementSystem(mRegistry, dt);
-  // animationSystem(mRegistry, dt);
+  animationSystem(mRegistry, dt);
   renderSystem(mRegistry, mRenderer);
 }
 

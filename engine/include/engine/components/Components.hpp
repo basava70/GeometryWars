@@ -8,8 +8,8 @@
 namespace engine::components {
 
 struct Transform {
-  float x{}, y{};
-  float width{}, height{};
+  float x{}, y{};          /// cordinates of the object
+  float width{}, height{}; /// width and height of the object size
   int degrees{};
 };
 

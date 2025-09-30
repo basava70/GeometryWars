@@ -18,23 +18,35 @@ public:
   ~QuitCommand();
 };
 
-class MoveUpCommand : public Command {
+class MoveCommand : public Command {
 public:
+  MoveCommand(float speed) : mSpeed(speed) {}
+
+protected:
+  float mSpeed;
+};
+
+class MoveUpCommand : public MoveCommand {
+public:
+  MoveUpCommand(float speed) : MoveCommand(speed) {}
   virtual void execute(entt::registry &registry, entt::entity e) override;
   ~MoveUpCommand() override = default;
 };
-class MoveDownCommand : public Command {
+class MoveDownCommand : public MoveCommand {
 public:
+  MoveDownCommand(float speed) : MoveCommand(speed) {}
   virtual void execute(entt::registry &registry, entt::entity e) override;
   ~MoveDownCommand() override = default;
 };
-class MoveRightCommand : public Command {
+class MoveRightCommand : public MoveCommand {
 public:
+  MoveRightCommand(float speed) : MoveCommand(speed) {}
   virtual void execute(entt::registry &registry, entt::entity e) override;
   ~MoveRightCommand() override = default;
 };
-class MoveLeftCommand : public Command {
+class MoveLeftCommand : public MoveCommand {
 public:
+  MoveLeftCommand(float speed) : MoveCommand(speed) {}
   virtual void execute(entt::registry &registry, entt::entity e) override;
   ~MoveLeftCommand() override = default;
 };
