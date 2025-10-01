@@ -11,7 +11,6 @@
 #include <SDL3/SDL_timer.h>
 #include <cstdint>
 #include <memory>
-#include <vector>
 
 using namespace engine::core;
 using namespace engine::components;
@@ -24,40 +23,37 @@ bool Game::init() {
   bool rendererSucess = mRenderer.init(mWindow, GameConfig::cLogicalWidth,
                                        GameConfig::cLogicalHeight);
 
-  mInput.bindKey(SDLK_H, Action::MoveLeft);
-  mInput.bindKey(SDLK_L, Action::MoveRight);
-  mInput.bindKey(SDLK_J, Action::MoveDown);
-  mInput.bindKey(SDLK_K, Action::MoveUp);
+  mInput.bindKey(SDLK_H, Action::WalkLeft);
+  mInput.bindKey(SDLK_L, Action::WalkRight);
+  mInput.bindKey(SDLK_J, Action::WalkDown);
+  mInput.bindKey(SDLK_K, Action::WalkUp);
 
-  mInput.bindAction(Action::MoveLeft, std::make_unique<MoveLeftCommand>(
+  mInput.bindAction(Action::WalkLeft, std::make_unique<WalkingLeftCommand>(
                                           GameConfig::cPlayerSpeed));
-  mInput.bindAction(Action::MoveRight, std::make_unique<MoveRightCommand>(
+  mInput.bindAction(Action::WalkRight, std::make_unique<WalkingRightCommand>(
                                            GameConfig::cPlayerSpeed));
-  mInput.bindAction(Action::MoveDown, std::make_unique<MoveDownCommand>(
+  mInput.bindAction(Action::WalkDown, std::make_unique<WalkingDownCommand>(
                                           GameConfig::cPlayerSpeed));
-  mInput.bindAction(Action::MoveUp,
-                    std::make_unique<MoveUpCommand>(GameConfig::cPlayerSpeed));
+  mInput.bindAction(Action::WalkUp, std::make_unique<WalkingUpCommand>(
+                                        GameConfig::cPlayerSpeed));
 
   mPlayer = mRegistry.create();
-  auto sheet = std::make_shared<engine::core::Texture>();
-  bool loadSuccess = sheet->loadFromFile(mRenderer, "assets/Run.png");
+  auto walkingSheet = std::make_shared<engine::core::Texture>();
+  auto runningSheet = std::make_shared<engine::core::Texture>();
+  bool loadRunning = runningSheet->loadFromFile(mRenderer, "assets/Run.png");
+  bool loadWalking = walkingSheet->loadFromFile(mRenderer, "assets/Walk.png");
+  bool loadSuccess = loadRunning && loadWalking;
 
   mRegistry.emplace<Transform>(mPlayer, 500.f, 500.f, GameConfig::cPlayerSize,
                                GameConfig::cPlayerSize, 0.f);
   const int numberOfSprites = 8;
   const float spriteWidth = 1024.f / numberOfSprites;
   const float spriteHeight = 128.f;
+
+  // regsiter walking
   mRegistry.emplace<Renderable>(
-      mPlayer, sheet, SDL_FRect{0.0f, 0.0f, spriteWidth, spriteHeight});
+      mPlayer, walkingSheet, SDL_FRect{0.0f, 0.0f, spriteWidth, spriteHeight});
   mRegistry.emplace<Velocity>(mPlayer, 0, 0);
-
-  std::vector<SDL_FRect> frames;
-
-  for (int i = 0; i < numberOfSprites; i++) {
-    frames.push_back(
-        SDL_FRect{i * spriteWidth, 0.0f, spriteWidth, spriteHeight});
-  }
-  mRegistry.emplace<Animation>(mPlayer, frames, 0.0f, 0.1f, 0.0f, true);
 
   return windowSuccess && rendererSucess && loadSuccess;
 }
@@ -82,7 +78,6 @@ void Game::processInput() {
 void Game::update(double dt) {
   mRenderer.clear({0, 0, 0, 255});
   movementSystem(mRegistry, dt);
-  animationSystem(mRegistry, dt);
   renderSystem(mRegistry, mRenderer);
 }
 

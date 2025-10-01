@@ -2,10 +2,10 @@
 
 namespace engine::core {
 enum class Action {
-  MoveUp,
-  MoveDown,
-  MoveRight,
-  MoveLeft,
+  WalkUp,
+  WalkDown,
+  WalkRight,
+  WalkLeft,
   Fire,
   Destroyed,
   Quit

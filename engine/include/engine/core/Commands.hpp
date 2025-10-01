@@ -26,29 +26,29 @@ protected:
   float mSpeed;
 };
 
-class MoveUpCommand : public MoveCommand {
+class WalkingUpCommand : public MoveCommand {
 public:
-  MoveUpCommand(float speed) : MoveCommand(speed) {}
+  WalkingUpCommand(float speed) : MoveCommand(speed) {}
   virtual void execute(entt::registry &registry, entt::entity e) override;
-  ~MoveUpCommand() override = default;
+  ~WalkingUpCommand() override = default;
 };
-class MoveDownCommand : public MoveCommand {
+class WalkingDownCommand : public MoveCommand {
 public:
-  MoveDownCommand(float speed) : MoveCommand(speed) {}
+  WalkingDownCommand(float speed) : MoveCommand(speed) {}
   virtual void execute(entt::registry &registry, entt::entity e) override;
-  ~MoveDownCommand() override = default;
+  ~WalkingDownCommand() override = default;
 };
-class MoveRightCommand : public MoveCommand {
+class WalkingRightCommand : public MoveCommand {
 public:
-  MoveRightCommand(float speed) : MoveCommand(speed) {}
+  WalkingRightCommand(float speed) : MoveCommand(speed) {}
   virtual void execute(entt::registry &registry, entt::entity e) override;
-  ~MoveRightCommand() override = default;
+  ~WalkingRightCommand() override = default;
 };
-class MoveLeftCommand : public MoveCommand {
+class WalkingLeftCommand : public MoveCommand {
 public:
-  MoveLeftCommand(float speed) : MoveCommand(speed) {}
+  WalkingLeftCommand(float speed) : MoveCommand(speed) {}
   virtual void execute(entt::registry &registry, entt::entity e) override;
-  ~MoveLeftCommand() override = default;
+  ~WalkingLeftCommand() override = default;
 };
 
 } // namespace engine::core

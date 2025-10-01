@@ -6,28 +6,31 @@
 using namespace engine::core;
 using namespace engine::components;
 
-void MoveUpCommand::execute(entt::registry &registry, entt::entity entity) {
+void WalkingUpCommand::execute(entt::registry &registry, entt::entity entity) {
   if (registry.any_of<Velocity>(entity)) {
     auto &v = registry.get<Velocity>(entity);
+    v.dx = 0;
     v.dy = -mSpeed;
-    v.dx = 0;
   }
 }
-void MoveDownCommand::execute(entt::registry &registry, entt::entity entity) {
+void WalkingDownCommand::execute(entt::registry &registry,
+                                 entt::entity entity) {
   if (registry.any_of<Velocity>(entity)) {
     auto &v = registry.get<Velocity>(entity);
-    v.dy = mSpeed;
     v.dx = 0;
+    v.dy = mSpeed;
   }
 }
-void MoveRightCommand::execute(entt::registry &registry, entt::entity entity) {
+void WalkingRightCommand::execute(entt::registry &registry,
+                                  entt::entity entity) {
   if (registry.any_of<Velocity>(entity)) {
     auto &v = registry.get<Velocity>(entity);
     v.dx = mSpeed;
     v.dy = 0;
   }
 }
-void MoveLeftCommand::execute(entt::registry &registry, entt::entity entity) {
+void WalkingLeftCommand::execute(entt::registry &registry,
+                                 entt::entity entity) {
   if (registry.any_of<Velocity>(entity)) {
     auto &v = registry.get<Velocity>(entity);
     v.dx = -mSpeed;
