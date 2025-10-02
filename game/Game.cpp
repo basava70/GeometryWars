@@ -40,11 +40,15 @@ bool Game::init() {
   mPlayer = mRegistry.create();
   auto walkingSheet = std::make_shared<engine::core::Texture>();
   auto runningSheet = std::make_shared<engine::core::Texture>();
+  auto idleSheet = std::make_shared<engine::core::Texture>();
+
   bool loadRunning = runningSheet->loadFromFile(mRenderer, "assets/Run.png");
   bool loadWalking = walkingSheet->loadFromFile(mRenderer, "assets/Walk.png");
+  bool loadIdle = idleSheet->loadFromFile(mRenderer, "assets/_Run.png");
+
   bool loadSuccess = loadRunning && loadWalking;
 
-  mRegistry.emplace<Transform>(mPlayer, 500.f, 500.f, GameConfig::cPlayerSize,
+  mRegistry.emplace<Transform>(mPlayer, 0.f, 500.f, GameConfig::cPlayerSize,
                                GameConfig::cPlayerSize, 0.f);
   const int numberOfSprites = 8;
   const float spriteWidth = 1024.f / numberOfSprites;
