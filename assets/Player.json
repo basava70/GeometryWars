@@ -1,0 +1,92 @@
+{"frames": [
+
+{
+	"filename": "Attack_1.png",
+	"frame": {"x":512,"y":128,"w":640,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":640,"h":128},
+	"sourceSize": {"w":640,"h":128}
+},
+{
+	"filename": "Attack_2.png",
+	"frame": {"x":256,"y":0,"w":384,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":384,"h":128},
+	"sourceSize": {"w":384,"h":128}
+},
+{
+	"filename": "Attack_3.png",
+	"frame": {"x":640,"y":0,"w":512,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":128},
+	"sourceSize": {"w":512,"h":128}
+},
+{
+	"filename": "Dead.png",
+	"frame": {"x":1152,"y":0,"w":512,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":128},
+	"sourceSize": {"w":512,"h":128}
+},
+{
+	"filename": "Hurt.png",
+	"frame": {"x":0,"y":0,"w":256,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":256,"h":128},
+	"sourceSize": {"w":256,"h":128}
+},
+{
+	"filename": "Idle.png",
+	"frame": {"x":1152,"y":128,"w":768,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":768,"h":128},
+	"sourceSize": {"w":768,"h":128}
+},
+{
+	"filename": "Jump.png",
+	"frame": {"x":0,"y":384,"w":1536,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1536,"h":128},
+	"sourceSize": {"w":1536,"h":128}
+},
+{
+	"filename": "Run.png",
+	"frame": {"x":0,"y":256,"w":1024,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1024,"h":128},
+	"sourceSize": {"w":1024,"h":128}
+},
+{
+	"filename": "Shield.png",
+	"frame": {"x":0,"y":128,"w":512,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":128},
+	"sourceSize": {"w":512,"h":128}
+},
+{
+	"filename": "Walk.png",
+	"frame": {"x":1024,"y":256,"w":1024,"h":128},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1024,"h":128},
+	"sourceSize": {"w":1024,"h":128}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "SpriteSheet.png",
+	"format": "RGBA8888",
+	"size": {"w":2048,"h":512},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:28a233f3a9010bed8a58a2a8a4c324bc:227f3cd562afb03a608cfff95febff48:160eb6758fe4007ba8592b420f92bb0b$"
+}
+}

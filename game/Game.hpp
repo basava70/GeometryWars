@@ -23,6 +23,8 @@ private:
   float const mSpriteSize = 256.0f;
 
   bool init();
+  bool initPlayer();
+  void initKeyBindings();
   void processInput();
   void update(double dt);
   void render();

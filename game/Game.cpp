@@ -16,50 +16,48 @@ using namespace engine::core;
 using namespace engine::components;
 using namespace engine::systems;
 
-bool Game::init() {
-
-  bool windowSuccess = mWindow.init("Geometry Wars", GameConfig::cLogicalWidth,
-                                    GameConfig::cLogicalHeight);
-  bool rendererSucess = mRenderer.init(mWindow, GameConfig::cLogicalWidth,
-                                       GameConfig::cLogicalHeight);
-
+void Game::initKeyBindings() {
   mInput.bindKey(SDLK_H, Action::WalkLeft);
   mInput.bindKey(SDLK_L, Action::WalkRight);
-  mInput.bindKey(SDLK_J, Action::WalkDown);
-  mInput.bindKey(SDLK_K, Action::WalkUp);
 
   mInput.bindAction(Action::WalkLeft, std::make_unique<WalkingLeftCommand>(
                                           GameConfig::cPlayerSpeed));
   mInput.bindAction(Action::WalkRight, std::make_unique<WalkingRightCommand>(
                                            GameConfig::cPlayerSpeed));
-  mInput.bindAction(Action::WalkDown, std::make_unique<WalkingDownCommand>(
-                                          GameConfig::cPlayerSpeed));
-  mInput.bindAction(Action::WalkUp, std::make_unique<WalkingUpCommand>(
-                                        GameConfig::cPlayerSpeed));
+}
 
+bool Game::initPlayer() {
   mPlayer = mRegistry.create();
-  auto walkingSheet = std::make_shared<engine::core::Texture>();
-  auto runningSheet = std::make_shared<engine::core::Texture>();
-  auto idleSheet = std::make_shared<engine::core::Texture>();
+  auto playerSheet = std::make_shared<engine::core::Texture>();
 
-  bool loadRunning = runningSheet->loadFromFile(mRenderer, "assets/Run.png");
-  bool loadWalking = walkingSheet->loadFromFile(mRenderer, "assets/Walk.png");
-  bool loadIdle = idleSheet->loadFromFile(mRenderer, "assets/_Run.png");
+  bool loadPlayer = playerSheet->loadFromFile(mRenderer, "assets/Player.png");
 
-  bool loadSuccess = loadRunning && loadWalking;
+  bool loadSuccess = loadPlayer;
 
   mRegistry.emplace<Transform>(mPlayer, 0.f, 500.f, GameConfig::cPlayerSize,
                                GameConfig::cPlayerSize, 0.f);
-  const int numberOfSprites = 8;
-  const float spriteWidth = 1024.f / numberOfSprites;
-  const float spriteHeight = 128.f;
+
+  const float playerSheetWidth = 2048.f;
+  const float playerSheetHeight = 512.f;
 
   // regsiter walking
   mRegistry.emplace<Renderable>(
-      mPlayer, walkingSheet, SDL_FRect{0.0f, 0.0f, spriteWidth, spriteHeight});
+      mPlayer, playerSheet,
+      SDL_FRect{0.0f, 0.0f, playerSheetWidth, playerSheetHeight});
   mRegistry.emplace<Velocity>(mPlayer, 0, 0);
 
-  return windowSuccess && rendererSucess && loadSuccess;
+  return loadSuccess;
+}
+
+bool Game::init() {
+  bool windowSuccess = mWindow.init("Geometry Wars", GameConfig::cLogicalWidth,
+                                    GameConfig::cLogicalHeight);
+  bool rendererSucess = mRenderer.init(mWindow, GameConfig::cLogicalWidth,
+                                       GameConfig::cLogicalHeight);
+  initKeyBindings();
+  bool loadPlayer = initPlayer();
+
+  return loadPlayer;
 }
 
 void Game::processInput() {
