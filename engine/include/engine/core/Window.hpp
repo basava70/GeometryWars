@@ -37,8 +37,7 @@ private:
   int mHeight{0};
   int mWidth{0};
   std::string mTitle;
-  SDL_WindowFlags mFlags{SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN |
-                         SDL_WINDOW_HIGH_PIXEL_DENSITY};
+  SDL_WindowFlags mFlags{SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY};
 };
 
 } // namespace engine::core
