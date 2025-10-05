@@ -30,15 +30,19 @@ bool Game::initPlayer() {
   mPlayer = mRegistry.create();
   auto playerSheet = std::make_shared<engine::core::Texture>();
 
-  bool loadPlayer = playerSheet->loadFromFile(mRenderer, "assets/Player.png");
+  // bool loadPlayer = playerSheet->loadFromFile(mRenderer,
+  // "assets/Player.png");
+  bool loadPlayer = playerSheet->loadFromFile(mRenderer, "assets/Walk.png");
 
   bool loadSuccess = loadPlayer;
 
   mRegistry.emplace<Transform>(mPlayer, 0.f, 500.f, GameConfig::cPlayerSize,
                                GameConfig::cPlayerSize, 0.f);
 
-  const float playerSheetWidth = 2048.f;
-  const float playerSheetHeight = 512.f;
+  // const float playerSheetWidth = 2048.f;
+  // const float playerSheetHeight = 512.f;
+  const float playerSheetWidth = 1024.f / 8.f;
+  const float playerSheetHeight = 128.f;
 
   // regsiter walking
   mRegistry.emplace<Renderable>(
