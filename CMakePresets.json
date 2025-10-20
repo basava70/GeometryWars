@@ -1,0 +1,75 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20
+  },
+  "configurePresets": [
+    {
+      "name": "game",
+      "displayName": "Game Only (Debug)",
+      "description": "Build only the GeometryWars game (no tests).",
+      "generator": "Unix Makefiles",
+      "binaryDir": "out/game",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BUILD_GAME": "ON",
+        "BUILD_TEST": "OFF"
+      }
+    },
+    {
+      "name": "test",
+      "displayName": "Tests Only (Debug)",
+      "description": "Build and run tests only (no game).",
+      "generator": "Unix Makefiles",
+      "binaryDir": "out/test",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BUILD_GAME": "OFF",
+        "BUILD_TEST": "ON"
+      }
+    },
+    {
+      "name": "all",
+      "displayName": "Game + Tests (Debug)",
+      "description": "Build both GeometryWars and tests.",
+      "generator": "Unix Makefiles",
+      "binaryDir": "out/all",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "BUILD_GAME": "ON",
+        "BUILD_TEST": "ON"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Game (Release)",
+      "description": "Optimized release build for distribution.",
+      "generator": "Unix Makefiles",
+      "binaryDir": "out/release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_GAME": "ON",
+        "BUILD_TEST": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "game-build",
+      "configurePreset": "game"
+    },
+    {
+      "name": "test-build",
+      "configurePreset": "test"
+    },
+    {
+      "name": "all-build",
+      "configurePreset": "all"
+    },
+    {
+      "name": "release-build",
+      "configurePreset": "release"
+    }
+  ]
+}

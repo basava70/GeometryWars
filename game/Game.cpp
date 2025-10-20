@@ -2,7 +2,9 @@
 #include "GameConfig.hpp"
 #include "engine/components/Components.hpp"
 #include "engine/core/Action.hpp"
+#include "engine/core/AssetPath.hpp"
 #include "engine/core/Commands.hpp"
+#include "engine/core/Environment.hpp"
 #include "engine/core/Event.hpp"
 #include "engine/core/Texture.hpp"
 #include "engine/systems/systems.hpp"
@@ -10,6 +12,7 @@
 #include <SDL3/SDL_rect.h>
 #include <SDL3/SDL_timer.h>
 #include <cstdint>
+#include <iostream>
 #include <memory>
 
 using namespace engine::core;
@@ -30,9 +33,16 @@ bool Game::initPlayer() {
   mPlayer = mRegistry.create();
   auto playerSheet = std::make_shared<engine::core::Texture>();
 
+  auto walkPath = resolve_asset_path("Walk.png");
+
   // bool loadPlayer = playerSheet->loadFromFile(mRenderer,
   // "assets/Player.png");
-  bool loadPlayer = playerSheet->loadFromFile(mRenderer, "assets/Walk.png");
+  bool loadPlayer = false;
+
+  if (walkPath)
+    loadPlayer = playerSheet->loadFromFile(mRenderer, walkPath->string());
+  else
+    std::cerr << "[Game] Walk.png not found. Player texture not loaded.\n";
 
   bool loadSuccess = loadPlayer;
 
@@ -54,6 +64,7 @@ bool Game::initPlayer() {
 }
 
 bool Game::init() {
+  ensure_project_root();
   bool windowSuccess = mWindow.init("Geometry Wars", GameConfig::cLogicalWidth,
                                     GameConfig::cLogicalHeight);
   bool rendererSucess = mRenderer.init(mWindow, GameConfig::cLogicalWidth,
