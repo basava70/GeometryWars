@@ -9,6 +9,12 @@ file(GLOB TEST_SOURCES CONFIGURE_DEPENDS *.cpp)
 # ===============================
 add_executable(run_tests ${TEST_SOURCES})
 
+target_include_directories(run_tests
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/game
+        ${CMAKE_SOURCE_DIR}/engine/include
+)
+
 # Link against engine and Catch2
 target_link_libraries(run_tests
     PRIVATE
@@ -19,6 +25,5 @@ target_link_libraries(run_tests
 # ===============================
 # Register tests
 # ===============================
-include(CTest)
 include(Catch)
 catch_discover_tests(run_tests)

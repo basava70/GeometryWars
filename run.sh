@@ -1,50 +1,44 @@
 #!/bin/bash
-set -e
+## The following is written with the help of ChatGPT
+set -euo pipefail
 
-MODE=${1:-game} # default = just game
+MODE=${1:-game-debug}
+ROOT_DIR=$(dirname "$(realpath "$0")")
 
-# Single build folder
-BUILD_DIR="build"
-
-# Map mode → cmake flags
-case $MODE in
-game)
-  CMAKE_FLAGS="-DBUILD_GAME=ON -DBUILD_TEST=OFF"
-  ;;
-test)
-  CMAKE_FLAGS="-DBUILD_GAME=OFF -DBUILD_TEST=ON"
-  ;;
-all)
-  CMAKE_FLAGS="-DBUILD_GAME=ON -DBUILD_TEST=ON"
-  ;;
-*)
-  echo "Usage: $0 [game|test|all]"
+# Check preset validity
+if ! grep -q "\"name\": \"$MODE\"" "$ROOT_DIR/CMakePresets.json"; then
+  echo "  Unknown preset: $MODE"
+  echo "  Available presets:"
+  jq -r '.configurePresets[].name' "$ROOT_DIR/CMakePresets.json"
   exit 1
-  ;;
-esac
+fi
 
-# Configure or reconfigure (safe if build dir already exists)
-echo "Configuring CMake for mode: $MODE"
-cmake -S . -B "$BUILD_DIR" $CMAKE_FLAGS
+echo "󰙨  Using preset: $MODE"
 
-# Build
-cmake --build "$BUILD_DIR"
+# 1️⃣ Configure + Build
+cmake --preset "$MODE"
+cmake --build --preset "$MODE-build"
 
-# Run what was requested
+# 2️⃣ Update compile_commands.json symlink for clangd
+BUILD_DIR=$(jq -r ".configurePresets[] | select(.name==\"$MODE\") | .binaryDir" "$ROOT_DIR/CMakePresets.json")
+ln -sf "$ROOT_DIR/$BUILD_DIR/compile_commands.json" "$ROOT_DIR/compile_commands.json"
+echo "󰌠  Linked compile_commands.json → $BUILD_DIR"
+
+# 3️⃣ Run the target
 case $MODE in
-game)
-  echo "Running game..."
-  "./$BUILD_DIR/GeometryWars"
+game-*)
+  echo "󰡄  Launching GeometryWars..."
+  "$ROOT_DIR/$BUILD_DIR/GeometryWars"
   ;;
-test)
-  echo "Running tests..."
-  ctest --test-dir "$BUILD_DIR" --output-on-failure
+test-*)
+  echo "󰙨  Running unit tests..."
+  ctest --test-dir "$ROOT_DIR/$BUILD_DIR" --output-on-failure
   ;;
-all)
-  echo "Running game..."
-  "./$BUILD_DIR/GeometryWars"
+all-*)
+  echo "󰡄  Launching GeometryWars..."
+  "$ROOT_DIR/$BUILD_DIR/GeometryWars"
   echo
-  echo "Running tests..."
-  ctest --test-dir "$BUILD_DIR" --output-on-failure
+  echo "󰙨  Running unit tests..."
+  ctest --test-dir "$ROOT_DIR/$BUILD_DIR" --output-on-failure
   ;;
 esac

@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS True)
 
+enable_testing()
+
 find_package(SDL3 REQUIRED CONFIG)
 find_package(SDL3_image  REQUIRED CONFIG)
 find_package(SDL3_ttf REQUIRED CONFIG)
@@ -51,6 +53,5 @@ if(BUILD_GAME)
 endif()
 
 if(BUILD_TEST)
-  enable_testing()
   add_subdirectory(test)
 endif()
