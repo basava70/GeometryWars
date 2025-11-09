@@ -13,6 +13,7 @@
       "binaryDir": "out/game-debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "BUILD_GAME": "ON",
         "BUILD_TEST": "OFF"
       }
@@ -25,6 +26,7 @@
       "binaryDir": "out/game-release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "BUILD_GAME": "ON",
         "BUILD_TEST": "OFF"
       }
@@ -37,6 +39,7 @@
       "binaryDir": "out/test-debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "BUILD_GAME": "OFF",
         "BUILD_TEST": "ON"
       }
@@ -49,6 +52,7 @@
       "binaryDir": "out/test-release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "BUILD_GAME": "OFF",
         "BUILD_TEST": "ON"
       }
@@ -61,6 +65,7 @@
       "binaryDir": "out/all-debug",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "BUILD_GAME": "ON",
         "BUILD_TEST": "ON"
       }
@@ -73,11 +78,13 @@
       "binaryDir": "out/all-release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         "BUILD_GAME": "ON",
         "BUILD_TEST": "ON"
       }
     }
   ],
+
   "buildPresets": [
     { "name": "game-debug-build", "configurePreset": "game-debug" },
     { "name": "game-release-build", "configurePreset": "game-release" },
